@@ -1,0 +1,66 @@
+<template>
+    <lightning-card title="Ticket Management">
+        <div class="slds-p-around_medium">
+
+            <template if:true={loading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+
+            <lightning-input
+                label="Title"
+                value={title}
+                onchange={handleTitleChange}>
+            </lightning-input>
+
+            <lightning-textarea
+                label="Description"
+                value={description}
+                onchange={handleDescriptionChange}
+                class="slds-m-top_small">
+            </lightning-textarea>
+
+            <lightning-button
+                label="Create Ticket"
+                variant="brand"
+                onclick={handleCreate}
+                class="slds-m-top_medium">
+            </lightning-button>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error slds-m-top_small">
+                    {errorMessage}
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+
+    <lightning-card title="Existing Tickets" class="slds-m-top_medium">
+        <div class="slds-p-around_medium">
+
+            <template if:true={hasTickets}>
+                <template for:each={tickets} for:item="ticket">
+                    <div key={ticket.id} class="slds-box slds-m-bottom_small">
+                        <p><strong>{ticket.title}</strong></p>
+                        <p class="slds-m-top_x-small">{ticket.description}</p>
+                        <p class="slds-m-top_x-small">Status: {ticket.status}</p>
+                        <p class="slds-m-top_x-small">Created At: {ticket.createdAt}</p>
+
+                        <div class="slds-m-top_small">
+                            <lightning-combobox
+                                label="Change Status"
+                                data-id={ticket.id}
+                                value={ticket.status}
+                                options={statusOptions}
+                                onchange={handleStatusChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={hasTickets}>
+                <p>No tickets found.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
